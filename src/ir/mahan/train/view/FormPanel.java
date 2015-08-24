@@ -108,6 +108,7 @@ public class FormPanel extends JPanel implements ActionListener {
 	}
 
 	private void layoutComponent() {
+		
 		GridBagConstraints gc = new GridBagConstraints();
 
 		gc.weightx = 1;

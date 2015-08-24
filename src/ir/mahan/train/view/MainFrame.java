@@ -314,6 +314,12 @@ public class MainFrame extends JFrame {
 						JOptionPane.showMessageDialog(formPanel,
 								e.getMessage(), "Error",
 								JOptionPane.ERROR_MESSAGE);
+
+					} catch (ClassNotFoundException e) {
+
+						JOptionPane.showMessageDialog(formPanel,
+								e.getMessage(), "Error",
+								JOptionPane.ERROR_MESSAGE);
 					}
 
 				}

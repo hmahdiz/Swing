@@ -54,27 +54,17 @@ public class DataBase {
 
 	}
 
-	public List<Person> loadFromFile(File file) throws IOException {
+	public List<Person> loadFromFile(File file) throws IOException, ClassNotFoundException {
 
 		Person[] arrPerson = null;
 		FileInputStream fileStream;
 		ObjectInputStream os = null;
 
-		try {
+		fileStream = new FileInputStream(file);
+		os = new ObjectInputStream(fileStream);
+		arrPerson = (Person[]) os.readObject();
 
-			fileStream = new FileInputStream(file);
-			os = new ObjectInputStream(fileStream);
-			arrPerson = (Person[]) os.readObject();
-
-		} catch (Exception exp) {
-			exp.setStackTrace(null);
-		}
-
-		finally {
-
-			if (os != null)
-				os.close();
-		}
+		os.close();
 
 		return Arrays.asList(arrPerson);
 	}
