@@ -27,7 +27,7 @@ public class DataBase {
 		}
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=JavaTraining";
+		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa1;password=123;database=JavaTraining";
 		connectionString = DriverManager.getConnection(connectionURL);
 
 	}

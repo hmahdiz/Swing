@@ -38,15 +38,9 @@ public class loginMainFrame extends JDialog {
 			controller.connectToDatabase();
 			loginFormPannel.setConnectToDBLbal("*Database is Connected*");
 
-		} catch (SQLException e) {
-
-			JOptionPane.showMessageDialog(loginFormPannel, e.getMessage(),
-					"Error", JOptionPane.ERROR_MESSAGE);
-
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 
-			JOptionPane.showMessageDialog(loginFormPannel, e.getMessage(),
-					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
