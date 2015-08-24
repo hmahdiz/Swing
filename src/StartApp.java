@@ -11,7 +11,7 @@ public class StartApp {
 
 			@Override
 			public void run() {
-				new loginMainFrame("Login to Application");
+				new loginMainFrame("Login to Application ");
 				//new MainFrame("");
 
 			}
