@@ -104,7 +104,8 @@ public class Controller {
 		db.saveToFile(file, personList);
 	}
 
-	public List<FormEvent> loadFromFile(File file) throws IOException {
+	public List<FormEvent> loadFromFile(File file) throws IOException,
+			ClassNotFoundException {
 
 		List<Person> personList = db.loadFromFile(file);
 		List<FormEvent> formEventList = new ArrayList<FormEvent>();
