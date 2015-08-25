@@ -36,7 +36,7 @@ public class loginMainFrame extends JDialog {
 		try {
 
 			controller.connectToDatabase();
-			loginFormPannel.setConnectToDBLbal("*Database is Connected*");
+			loginFormPannel.setConnectToDBLbal("*Connected to the Database*");
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

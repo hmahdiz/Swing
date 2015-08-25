@@ -2,8 +2,10 @@ package ir.mahan.train.Model;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.Connection;
@@ -15,6 +17,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 public class DataBase {
 
@@ -27,7 +30,27 @@ public class DataBase {
 		}
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa1;password=123;database=JavaTraining";
+		Properties properties = new Properties();
+		
+		//String propertiesFileName = "resources/config/config.properties";
+		String propertiesFileName = "config.properties";
+		
+		InputStream inputStream;
+		inputStream = getClass().getClassLoader().getResourceAsStream(propertiesFileName);
+
+		if (inputStream != null) {
+			properties.load(inputStream);
+		} else {
+			throw new FileNotFoundException("property file '" + propertiesFileName + "' not found in the classpath.");
+		}
+
+		
+		String server = properties.getProperty("server");
+		String database = properties.getProperty("database");
+		String user = properties.getProperty("user");
+		String password = properties.getProperty("password");
+		
+		String connectionURL = "jdbc:sqlserver://"+server+";user="+user+";password="+password+";database="+database+"";
 		connectionString = DriverManager.getConnection(connectionURL);
 
 	}
