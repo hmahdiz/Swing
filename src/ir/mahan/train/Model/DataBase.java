@@ -21,8 +21,8 @@ import java.util.Properties;
 
 public class DataBase {
 
-	Connection connectionString;
-
+	private Connection connectionString;
+	
 	public void connect() throws Exception {
 
 		if (connectionString != null) {
@@ -32,7 +32,6 @@ public class DataBase {
 
 		Properties properties = new Properties();
 		
-		//String propertiesFileName = "resources/config/config.properties";
 		String propertiesFileName = "config.properties";
 		
 		InputStream inputStream;
@@ -153,66 +152,59 @@ public class DataBase {
 
 	private void updatePersoninDatabase(Person person) throws SQLException {
 
-		String updateQuery = createUpdatePersonQuery(person);
+		String updateQuery = "UPDATE [G3].[Masoumeh_Hamideh] "
+				+ "SET [FirstName] = ? ,[LastName] = ?, [Gender] = ? ,[Age] = ? ,[Category] = ? ,[City] = ? ,[Sport] = ? ,[IsEmployee] = ? ,[Salary] = ? "
+				+ "where [ID] = ?";
 
-		PreparedStatement preparedStatementforUpdateQuery = connectionString
-				.prepareStatement(updateQuery);
+		PreparedStatement preparedStatement = connectionString.prepareStatement(updateQuery);
+		
+		preparedStatement.setString(1, person.getfName());
+		preparedStatement.setString(2, person.getlName());
+		preparedStatement.setString(3, person.getGender());
+		preparedStatement.setString(4, person.getAge());
+		preparedStatement.setString(5, person.getCategoty());
+		preparedStatement.setString(6, person.getCity());
+		preparedStatement.setString(7, person.getSport());
+		preparedStatement.setBoolean(8, person.getIsEmployee());
+		preparedStatement.setString(9, person.getSalary());
+		preparedStatement.setInt(10, person.getID());
 
-		preparedStatementforUpdateQuery.executeUpdate();
+		preparedStatement.executeUpdate();
 
 	}
 
-	private void insertPersontoDatabase(Person person) throws SQLException,
-			Exception {
-
-		String insertQuery = createInsertPersonQuery(person);
-
-		PreparedStatement preparedStatementforInsertQuery = connectionString
-				.prepareStatement(insertQuery);
-
-		preparedStatementforInsertQuery.executeUpdate();
-	}
-
-	private String createUpdatePersonQuery(Person person) {
-
-		String updateQuery = "UPDATE [G3].[Masoumeh_Hamideh]"
-				+ " SET [FirstName] = '" + person.getfName()
-				+ "' ,[LastName] = '" + person.getlName() + "' ,[Gender] = '"
-				+ person.getGender() + "' ,[Age] = '" + person.getAge()
-				+ "' ,[Category] = '" + person.getCategoty() + "' ,[City] = '"
-				+ person.getCity() + "' ,[Sport] = '" + person.getSport()
-				+ "' ,[IsEmployee] = '" + person.getIsEmployee()
-				+ "' ,[Salary] = '" + person.getSalary() + "' where [ID] = "
-				+ person.getID();
-
-		return updateQuery;
-	}
-
-	private String createInsertPersonQuery(Person person) throws SQLException,
-			Exception {
+	private void insertPersontoDatabase(Person person) throws SQLException, Exception {
 
 		String insertQuery = "INSERT INTO [G3].[Masoumeh_Hamideh] "
 				+ "([ID], [FirstName] ,[LastName] ,[Gender] ,[Age] ,[Category] ,[City] ,[Sport] ,[IsEmployee] ,[Salary]) "
-				+ "VALUES(" + person.getID() + ", '" + person.getfName()
-				+ "', '" + person.getlName() + "', '" + person.getGender()
-				+ "', '" + person.getAge() + "', '" + person.getCategoty()
-				+ "', '" + person.getCity() + "', '" + person.getSport()
-				+ "', '" + String.valueOf(person.getIsEmployee()) + "', '"
-				+ person.getSalary() + "' )";
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		
+		PreparedStatement preparedStatement = connectionString.prepareStatement(insertQuery);
 
-		return insertQuery;
+		preparedStatement.setInt(1, person.getID());
+		preparedStatement.setString(2, person.getfName());
+		preparedStatement.setString(3, person.getlName());
+		preparedStatement.setString(4, person.getGender());
+		preparedStatement.setString(5, person.getAge());
+		preparedStatement.setString(6, person.getCategoty());
+		preparedStatement.setString(7, person.getCity());
+		preparedStatement.setString(8, person.getSport());
+		preparedStatement.setBoolean(9, person.getIsEmployee());
+		preparedStatement.setString(10, person.getSalary());
+		
+		preparedStatement.executeUpdate();
 	}
 
-	private boolean existThisPersonInDatabase(int id) throws Exception,
-			SQLException {
 
-		String sqlQuery = "select count(*) as count from [G3].[Masoumeh_Hamideh] where [ID] = "
-				+ id;
+	private boolean existThisPersonInDatabase(int id) throws Exception, SQLException {
 
-		PreparedStatement preparedStatementforSelectQuery = connectionString
-				.prepareStatement(sqlQuery);
+		String sqlQuery = "select count(*) as count from [G3].[Masoumeh_Hamideh] where [ID] = ?";
 
-		ResultSet resultSet = preparedStatementforSelectQuery.executeQuery();
+		PreparedStatement preparedStatement = connectionString.prepareStatement(sqlQuery);
+		
+		preparedStatement.setInt(1, id);
+		
+		ResultSet resultSet = preparedStatement.executeQuery();
 
 		if (resultSet.next()) {
 			int count = resultSet.getInt("count");
@@ -241,16 +233,16 @@ public class DataBase {
 
 	}
 
-	public boolean userAuthentication(String username, String password)
-			throws SQLException, Exception {
+	public boolean userAuthentication(String username, String password) throws SQLException, Exception {
 
-		String sqlQuery = "select count(*) as count from [G3].[UserLogin] where [UserName] = '"
-				+ username + "' and " + "[PassWord]= '" + password + "'";
+		String sqlQuery = "select count(*) as count from [G3].[UserLogin] where [UserName] = ? and [PassWord]= ?";
 
-		PreparedStatement preparedStatementforSelectQuery = connectionString
-				.prepareStatement(sqlQuery);
+		PreparedStatement preparedStatement = connectionString.prepareStatement(sqlQuery);
 
-		ResultSet resultSet = preparedStatementforSelectQuery.executeQuery();
+		preparedStatement.setString(1, username);
+		preparedStatement.setString(2, password);
+		
+		ResultSet resultSet = preparedStatement.executeQuery();
 
 		if (resultSet.next()) {
 			if (resultSet.getInt(1) > 0)
@@ -264,23 +256,16 @@ public class DataBase {
 
 		if (existThisPersonInDatabase(id)) {
 
-			String deleteQuery = createDeletePersonQuery(id);
+			String deleteQuery = "DELETE [G3].[Masoumeh_Hamideh]  where [ID] = ?";
+			
+			PreparedStatement preparedStatement = connectionString.prepareStatement(deleteQuery);
 
-			PreparedStatement preparedStatementforUpdateQuery = connectionString
-					.prepareStatement(deleteQuery);
-
-			preparedStatementforUpdateQuery.executeUpdate();
+			preparedStatement.setInt(1, id);
+			
+			preparedStatement.executeUpdate();
 
 		}
 
-	}
-
-	private String createDeletePersonQuery(int id) {
-
-		String deleteQuery = "DELETE [G3].[Masoumeh_Hamideh]  where [ID] = "
-				+ id;
-
-		return deleteQuery;
 	}
 
 }
