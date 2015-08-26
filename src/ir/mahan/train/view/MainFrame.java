@@ -457,7 +457,8 @@ public class MainFrame extends JFrame {
 
 			System.exit(0);
 
+		} else {
+			this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		}
 	}
-
 }
